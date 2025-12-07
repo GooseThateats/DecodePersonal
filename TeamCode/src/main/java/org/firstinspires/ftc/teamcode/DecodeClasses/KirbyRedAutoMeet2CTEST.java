@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Autonomous
-public final class KirbyBlueAutoMeet1ATEST extends LinearOpMode {
+public final class KirbyRedAutoMeet2CTEST extends LinearOpMode {
 
     private Pose2d beginPose;
     private MecanumDrive drive;
@@ -22,7 +22,7 @@ public final class KirbyBlueAutoMeet1ATEST extends LinearOpMode {
     private LED rightLight;
     private ColorSensorCode leftColor;
     private ColorSensorCode rightColor;
-    private DriveMotorTest vroom;
+    private MotorClass vroom;
 
     private Hammer hammer;
 
@@ -58,7 +58,7 @@ public final class KirbyBlueAutoMeet1ATEST extends LinearOpMode {
         rightLight                  = new LED(hardwareMap, "right_light");
         leftColor       = new ColorSensorCode(hardwareMap, "left_color_sensor");
         rightColor      = new ColorSensorCode(hardwareMap, "right_color_sensor");
-        vroom            = new DriveMotorTest(hardwareMap);
+        vroom            = new MotorClass(hardwareMap);
 
 
         boolean reverse = true;
@@ -79,12 +79,13 @@ public final class KirbyBlueAutoMeet1ATEST extends LinearOpMode {
 
         if(opModeIsActive()) {
 
-
-            vroom.motorTest(-0.4);
-            sleep(1800);
-            vroom.stopMotor();
             leftFirecracker.setTargetVelocity(1150);
             rightFirecracker.setTargetVelocity(1150);
+
+            vroom.motorTest(-0.4);
+            sleep(2000);
+            vroom.stopMotor();
+
 
 
             //first fire cycle
@@ -104,7 +105,7 @@ public final class KirbyBlueAutoMeet1ATEST extends LinearOpMode {
             leftFirecracker.ceaseFire();
             rightFirecracker.ceaseFire();
 
-            vroom.powerStrafe(false, 0.5);
+            vroom.powerStrafe(true, 0.5);
             sleep(750);
             vroom.stopMotor();
         }

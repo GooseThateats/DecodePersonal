@@ -26,4 +26,8 @@ public class Motors {
         return motor.getCurrentPosition();
     }
 
+    public void setReverse(){
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
+
 }

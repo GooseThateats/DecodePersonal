@@ -7,15 +7,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Autonomous
-public final class KirbyFarAutoMeet1A extends LinearOpMode {
+public final class KirbyRedAutoMeet1AENCODER extends LinearOpMode {
 
     private Pose2d beginPose;
     private MecanumDrive drive;
     private CameraSystem camera;
     private Firecracker rightFirecracker;
     private Firecracker leftFirecracker;
-    private Inhaler inhaler1;
-    private Inhaler inhaler2;
+    private Inhaler inhaler;
     private Feeder leftFeeder;
     private Feeder rightFeeder;
     private LED leftLight;
@@ -51,8 +50,7 @@ public final class KirbyFarAutoMeet1A extends LinearOpMode {
         camera             = new CameraSystem(hardwareMap);
         rightFirecracker    =  new Firecracker(hardwareMap, "right_launcher");
         leftFirecracker     =  new Firecracker(hardwareMap, "left_launcher");
-        inhaler1                 = new Inhaler(hardwareMap, "intake");
-        inhaler2                 = new Inhaler(hardwareMap, "transfer");
+        inhaler                 = new Inhaler(hardwareMap, "intake");
         leftFeeder               = new Feeder(hardwareMap, "left_feeder");
         rightFeeder              = new Feeder(hardwareMap, "right_feeder");
         leftLight                   = new LED(hardwareMap, "left_light");
@@ -72,8 +70,7 @@ public final class KirbyFarAutoMeet1A extends LinearOpMode {
         rightFeeder.initialize(notReverse);
         leftFirecracker.initialize(notReverse);
         rightFirecracker.initialize(reverse);
-        inhaler1.initialize(reverse);
-        inhaler2.initialize(notReverse);
+        inhaler.initialize(reverse);
         vroom.initialize(true);
         //camera.cameraOn();
 
@@ -83,7 +80,7 @@ public final class KirbyFarAutoMeet1A extends LinearOpMode {
         if(opModeIsActive()) {
 
 
-
+            vroom.moveVertical(-20, 0.5);
 
 
 
@@ -97,34 +94,28 @@ public final class KirbyFarAutoMeet1A extends LinearOpMode {
             //third fire cycle
             launchCycle(leftFeeder, leftFirecracker);
 
-            launchCycle(rightFeeder, rightFirecracker);
-
-            launchCycle(leftFeeder, leftFirecracker);
-
             leftFirecracker.ceaseFire();
             rightFirecracker.ceaseFire();
 
-            vroom.motorTest(0.4);
-            sleep(600);
+            vroom.powerStrafe(true, 0.5);
+            sleep(750);
             vroom.stopMotor();
         }
     }
 
     void launchCycle(Feeder feed, Firecracker launcher){
-        leftFirecracker.crackBigBoyFire();
-        rightFirecracker.crackBigBoyFire();
-        launcherTarget = LAUNCHER_FAR_TARGET_VELOCITY;
+        leftFirecracker.crackDaFire();
+        rightFirecracker.crackDaFire();
+
         while(opModeIsActive() && launcher.getCurrentVelocity()<launcherTarget){
             telemetry.addData("Current velocity: ", launcher.getCurrentVelocity());
             telemetry.update();
         }
-        inhaler1.inhale_on();
-        inhaler2.inhale_on();
+        inhaler.inhale_on();
         feed.feed_on();
         sleep(1000);
         feed.feed_off();
-        inhaler1.inhale_off();
-        inhaler2.inhale_off();
+        inhaler.inhale_off();
     }
 }
 

@@ -23,7 +23,7 @@ public final class FunctionalityTest extends LinearOpMode {
     private LED rightLight                  = new LED(hardwareMap, "right_light");
     private ColorSensorCode leftColor       = new ColorSensorCode(hardwareMap, "left_color_sensor");
     private ColorSensorCode rightColor      = new ColorSensorCode(hardwareMap, "right_color_sensor");
-    private DriveMotorTest test1            = new DriveMotorTest(hardwareMap);
+    private MotorClass test1            = new MotorClass(hardwareMap);
 
     @Override
     public void runOpMode() throws InterruptedException {

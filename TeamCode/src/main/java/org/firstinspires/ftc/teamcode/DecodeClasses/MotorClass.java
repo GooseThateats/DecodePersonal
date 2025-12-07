@@ -1,43 +1,20 @@
 package org.firstinspires.ftc.teamcode.DecodeClasses;
 
-import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
-
 import static java.lang.Thread.sleep;
-
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.TankDrive;
-import org.firstinspires.ftc.teamcode.tuning.TuningOpModes;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-public class DriveMotorTest {
+
+public class MotorClass {
     DcMotorEx leftFront, leftBack, rightBack, rightFront;
 
-    double ticksPerInch = (4*28 *
-                            19.2)
-            /              (104*Math.PI)
-            / 25.4;
+    double ticksPerInch = (4*28 * 19.2)
+            /(104*Math.PI)
+            * 25.4;
     double angleRatio;
     double strafeRatio = 0;
-    public DriveMotorTest(HardwareMap hardwareMap) {
+    public MotorClass(HardwareMap hardwareMap) {
         // Initialize arm motor
         leftFront = hardwareMap.get(DcMotorEx.class, "left_front_drive");
         leftBack = hardwareMap.get(DcMotorEx.class, "left_back_drive");
@@ -106,7 +83,6 @@ public class DriveMotorTest {
         setVerticalEncoderCount(encoders);
         setRunToPositionMode();
         setSpeed(speed);
-        sleep(500);
         while(Math.abs(leftBack.getCurrentPosition()) < Math.abs(leftBack.getTargetPosition()) || Math.abs(leftFront.getCurrentPosition()) < Math.abs(leftFront.getTargetPosition()) || Math.abs(rightFront.getCurrentPosition()) < Math.abs(rightFront.getTargetPosition()) || Math.abs(rightBack.getCurrentPosition()) < Math.abs(rightBack.getTargetPosition())){
             setVerticalEncoderCount(encoders);
             setRunToPositionMode();
@@ -116,15 +92,28 @@ public class DriveMotorTest {
         setSpeed(0);
     }
 
-    public void rotate(double angle, double speed){
+    public void rotate(double angle, double speed, boolean right){
         int encoders = (int)(angle * angleRatio);
+        setRotate(encoders, right);
+        setRunToPositionMode();
+        setSpeed(speed);
+        while(Math.abs(leftBack.getCurrentPosition()) < Math.abs(leftBack.getTargetPosition()) || Math.abs(leftFront.getCurrentPosition()) < Math.abs(leftFront.getTargetPosition()) || Math.abs(rightFront.getCurrentPosition()) < Math.abs(rightFront.getTargetPosition()) || Math.abs(rightBack.getCurrentPosition()) < Math.abs(rightBack.getTargetPosition())){
+            setRotate(encoders, right);
+            setRunToPositionMode();
+            setSpeed(speed);
+
+        }
+        setSpeed(0);
     }
     public void strafe(double distance, double speed, boolean right){
         int encoders = (int)(distance*ticksPerInch);
         setHorizontalEncoderCount(encoders, right);
         setRunToPositionMode();
         setSpeed(speed);
-        while(leftFront.isBusy() || rightFront.isBusy() || leftBack.isBusy() || rightBack.isBusy()){
+        while(Math.abs(leftBack.getCurrentPosition()) < Math.abs(leftBack.getTargetPosition()) || Math.abs(leftFront.getCurrentPosition()) < Math.abs(leftFront.getTargetPosition()) || Math.abs(rightFront.getCurrentPosition()) < Math.abs(rightFront.getTargetPosition()) || Math.abs(rightBack.getCurrentPosition()) < Math.abs(rightBack.getTargetPosition())){
+            setHorizontalEncoderCount(encoders, right);
+            setRunToPositionMode();
+            setSpeed(speed);
 
         }
         setSpeed(0);
@@ -165,6 +154,8 @@ public class DriveMotorTest {
             rightBack.setTargetPosition(-encoderCount);
         }
     }
+
+
 
     public void setRotate(int encoderCount, boolean right){
         if(right){

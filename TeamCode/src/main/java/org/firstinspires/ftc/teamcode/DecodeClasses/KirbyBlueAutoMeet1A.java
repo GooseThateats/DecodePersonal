@@ -22,7 +22,7 @@ public final class KirbyBlueAutoMeet1A extends LinearOpMode {
     private LED rightLight;
     private ColorSensorCode leftColor;
     private ColorSensorCode rightColor;
-    private DriveMotorTest vroom;
+    private MotorClass vroom;
 
     private Hammer hammer;
 
@@ -58,7 +58,7 @@ public final class KirbyBlueAutoMeet1A extends LinearOpMode {
         rightLight                  = new LED(hardwareMap, "right_light");
         leftColor       = new ColorSensorCode(hardwareMap, "left_color_sensor");
         rightColor      = new ColorSensorCode(hardwareMap, "right_color_sensor");
-        vroom            = new DriveMotorTest(hardwareMap);
+        vroom            = new MotorClass(hardwareMap);
 
 
         boolean reverse = true;
