@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.MotorClass;
 
 import com.acmerobotics.roadrunner.Action;
 
-@Autonomous
+@Autonomous(name = "don't touch me1")
 public final class RoadRunnerBlueAuto extends LinearOpMode {
 
     private Pose2d beginPose;

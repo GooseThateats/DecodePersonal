@@ -25,8 +25,8 @@ import org.firstinspires.ftc.teamcode.SubSystems.Inhaler;
 import org.firstinspires.ftc.teamcode.SubSystems.LED;
 import org.firstinspires.ftc.teamcode.SubSystems.MotorClass;
 
-@Autonomous(name = "don't touch me7")
-public final class RoadRunnerRedAutoPattern extends LinearOpMode {
+@Autonomous(group = "MSI")
+public final class MSI_RedSideGoalWithPattern extends LinearOpMode {
 
     private Pose2d beginPose;
     private Pose2d launchPose;
@@ -104,16 +104,49 @@ public final class RoadRunnerRedAutoPattern extends LinearOpMode {
         camera.cameraOn();
 
         Action firstCycle = drive.actionBuilder(beginPose)
-                .strafeToLinearHeading(new Vector2d(-16,15), Math.toRadians(170))
+                .strafeToLinearHeading(new Vector2d(-16,15), Math.toRadians(195))
                 .build();
 
-        Action turning = drive.actionBuilder(new Pose2d(-16, 15, Math.toRadians(170)))
-                .turnTo(134)
+
+        Action endCycle = drive.actionBuilder(launchPose)
+                .strafeToLinearHeading(new Vector2d(0,20), Math.toRadians(134))
                 .build();
 
-        Action secondCycle = drive.actionBuilder(launchPose)
+        waitForStart();
+            timer.reset();
+            Actions.runBlocking(
+                    new SequentialAction(
+                            new ParallelAction(
+                                    leftFirecracker.closeLaunch(),
+                                    rightFirecracker.closeLaunch(),
+                                    inhaler1.intakeOn(),
+                                    inhaler2.intakeOn()
+                            ),
+                            firstCycle
+                    )
+            );
+            while(opModeIsActive() && patternNumber != 21 && patternNumber != 22 && patternNumber != 23 && timer.seconds()<5){
+                patternNumber = camera.getPattern();
+            }
+
+
+
+
+        Action turning  = drive.actionBuilder(drive.localizer.getPose())
+                .turnTo(Math.toRadians(134))
+                .build();
+
+        Actions.runBlocking(
+                new SequentialAction(
+                        turning,
+                        firstCycleLaunch(),
+                        hammer.right()
+                )
+        );
+
+        Action secondCycle = drive.actionBuilder(drive.localizer.getPose())
                 .splineToSplineHeading(new Pose2d(-6,22, Math.toRadians(90)), Math.toRadians(90))
-                .afterDisp(7, ()->
+                .afterDisp(4.5, ()->
                         Actions.runBlocking(
                                 new ParallelAction(
                                         hammer.left()
@@ -123,65 +156,36 @@ public final class RoadRunnerRedAutoPattern extends LinearOpMode {
                 .splineToSplineHeading(launchPose, Math.toRadians(270))
                 .build();
 
-        Action thirdCycle = drive.actionBuilder(launchPose)
-                .splineToSplineHeading(new Pose2d(22,18, Math.toRadians(90)), Math.toRadians(90))
-                .afterDisp(0.1, ()->
-                        Actions.runBlocking(
-                                new ParallelAction(
-                                        hammer.left()
-                                )
-                        ))
-                .lineToYLinearHeading(34, Math.toRadians(90), new TranslationalVelConstraint(10.0))
-                .splineToSplineHeading(launchPose, Math.toRadians(200))
-                .build();
-
-        Action fourthCycle = drive.actionBuilder(launchPose)
-                .splineToSplineHeading(new Pose2d(48,25, Math.toRadians(90)), Math.toRadians(90))
-                .afterDisp(4, ()->
-                        Actions.runBlocking(
-                                new ParallelAction(
-                                        hammer.left()
-                                )
-                        ))
-                .lineToYLinearHeading(40, Math.toRadians(90), new TranslationalVelConstraint(10.0))
-                .splineToSplineHeading(launchPose, Math.toRadians(140))
-                .build();
-
-
-
-
-        waitForStart();
-        timer.reset();
         Actions.runBlocking(
                 new SequentialAction(
-                        new ParallelAction(
-                                leftFirecracker.closeLaunch(),
-                                rightFirecracker.closeLaunch(),
-                                inhaler1.intakeOn(),
-                                inhaler2.intakeOn()
-                        ),
-                        firstCycle
-                )
-        );
-        while(opModeIsActive() && patternNumber != 21 && patternNumber != 22 && patternNumber != 23 && timer.seconds()<5){
-            patternNumber = camera.getPattern();
-        }
-        Actions.runBlocking(
-                new SequentialAction(
-                        turning,
-                        firstCycleLaunch(),
-                        hammer.right(),
                         secondCycle,
                         secondCycleLaunch(),
-                        hammer.right(),
-                        thirdCycle,
-                        thirdCycleLaunch(),
-                        hammer.right(),
-                        fourthCycle,
-                        testLaunchCycle(),
                         hammer.right()
                 )
         );
+
+        Action thirdCycle = drive.actionBuilder(drive.localizer.getPose())
+                .splineToSplineHeading(new Pose2d(22,17.3, Math.toRadians(90)), Math.toRadians(90))
+                .afterDisp(0, ()->
+                        Actions.runBlocking(
+                                new ParallelAction(
+                                        hammer.left()
+                                )
+                        ))
+                .lineToYLinearHeading(36, Math.toRadians(90), new TranslationalVelConstraint(10.0))
+                .lineToYLinearHeading(30, Math.toRadians(90))
+                .splineToSplineHeading(launchPose, Math.toRadians(200))
+                .build();
+
+        Actions.runBlocking(
+                new SequentialAction(
+                        thirdCycle,
+                        thirdCycleLaunch(),
+                        endCycle
+                )
+        );
+
+
 
 
     }
@@ -299,39 +303,39 @@ public final class RoadRunnerRedAutoPattern extends LinearOpMode {
     public Action leftLeftRight(){
         return new SequentialAction(
                 leftFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 leftFeeder.rest(),
                 leftFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 leftFeeder.rest(),
                 rightFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 rightFeeder.rest()
         );
     }
     public Action leftRightLeft(){
         return new SequentialAction(
                 leftFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 leftFeeder.rest(),
                 rightFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 rightFeeder.rest(),
                 leftFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 leftFeeder.rest()
         );
     }
     public Action rightLeftLeft(){
         return new SequentialAction(
                 rightFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 rightFeeder.rest(),
                 leftFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 leftFeeder.rest(),
                 leftFeeder.feed(),
-                new SleepAction(1),
+                new SleepAction(0.8),
                 leftFeeder.rest()
         );
     }

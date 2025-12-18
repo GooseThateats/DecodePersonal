@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.MotorClass;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
+@TeleOp(group = "Trouble Shoot")
 public final class FunctionalityTest extends LinearOpMode {
 
     private Pose2d beginPose                = new Pose2d(0, 0, 0);

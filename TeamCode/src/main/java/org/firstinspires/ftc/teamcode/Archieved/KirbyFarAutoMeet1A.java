@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.DecodeOpModes;
+package org.firstinspires.ftc.teamcode.Archieved;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,14 +15,15 @@ import org.firstinspires.ftc.teamcode.SubSystems.LED;
 import org.firstinspires.ftc.teamcode.SubSystems.MotorClass;
 
 @Autonomous
-public final class KirbyRedAutoMeet1A extends LinearOpMode {
+public final class KirbyFarAutoMeet1A extends LinearOpMode {
 
     private Pose2d beginPose;
     private MecanumDrive drive;
     private CameraSystem camera;
     private Firecracker rightFirecracker;
     private Firecracker leftFirecracker;
-    private Inhaler inhaler;
+    private Inhaler inhaler1;
+    private Inhaler inhaler2;
     private Feeder leftFeeder;
     private Feeder rightFeeder;
     private LED leftLight;
@@ -58,7 +59,8 @@ public final class KirbyRedAutoMeet1A extends LinearOpMode {
         camera             = new CameraSystem(hardwareMap);
         rightFirecracker    =  new Firecracker(hardwareMap, "right_launcher");
         leftFirecracker     =  new Firecracker(hardwareMap, "left_launcher");
-        inhaler                 = new Inhaler(hardwareMap, "intake");
+        inhaler1                 = new Inhaler(hardwareMap, "intake");
+        inhaler2                 = new Inhaler(hardwareMap, "transfer");
         leftFeeder               = new Feeder(hardwareMap, "left_feeder");
         rightFeeder              = new Feeder(hardwareMap, "right_feeder");
         leftLight                   = new LED(hardwareMap, "left_light");
@@ -78,7 +80,8 @@ public final class KirbyRedAutoMeet1A extends LinearOpMode {
         rightFeeder.initialize(notReverse);
         leftFirecracker.initialize(notReverse);
         rightFirecracker.initialize(reverse);
-        inhaler.initialize(reverse);
+        inhaler1.initialize(reverse);
+        inhaler2.initialize(notReverse);
         vroom.initialize(true);
         //camera.cameraOn();
 
@@ -88,9 +91,7 @@ public final class KirbyRedAutoMeet1A extends LinearOpMode {
         if(opModeIsActive()) {
 
 
-            vroom.motorTest(-0.4);
-            sleep(2000);
-            vroom.stopMotor();
+
 
 
 
@@ -104,28 +105,34 @@ public final class KirbyRedAutoMeet1A extends LinearOpMode {
             //third fire cycle
             launchCycle(leftFeeder, leftFirecracker);
 
+            launchCycle(rightFeeder, rightFirecracker);
+
+            launchCycle(leftFeeder, leftFirecracker);
+
             leftFirecracker.ceaseFire();
             rightFirecracker.ceaseFire();
 
-            vroom.powerStrafe(true, 0.5);
-            sleep(750);
+            vroom.motorTest(0.4);
+            sleep(600);
             vroom.stopMotor();
         }
     }
 
     void launchCycle(Feeder feed, Firecracker launcher){
-        leftFirecracker.crackDaFire();
-        rightFirecracker.crackDaFire();
-
+        leftFirecracker.crackBigBoyFire();
+        rightFirecracker.crackBigBoyFire();
+        launcherTarget = LAUNCHER_FAR_TARGET_VELOCITY;
         while(opModeIsActive() && launcher.getCurrentVelocity()<launcherTarget){
             telemetry.addData("Current velocity: ", launcher.getCurrentVelocity());
             telemetry.update();
         }
-        inhaler.inhale_on();
+        inhaler1.inhale_on();
+        inhaler2.inhale_on();
         feed.feed_on();
         sleep(1000);
         feed.feed_off();
-        inhaler.inhale_off();
+        inhaler1.inhale_off();
+        inhaler2.inhale_off();
     }
 }
 

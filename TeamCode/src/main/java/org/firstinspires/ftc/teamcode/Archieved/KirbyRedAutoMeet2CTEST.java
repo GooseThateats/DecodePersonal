@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.DecodeOpModes;
+package org.firstinspires.ftc.teamcode.Archieved;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.LED;
 import org.firstinspires.ftc.teamcode.SubSystems.MotorClass;
 
 @Autonomous
-public final class KirbyBlueAutoMeet1A extends LinearOpMode {
+public final class KirbyRedAutoMeet2CTEST extends LinearOpMode {
 
     private Pose2d beginPose;
     private MecanumDrive drive;
@@ -44,7 +44,7 @@ public final class KirbyBlueAutoMeet1A extends LinearOpMode {
     final double LAUNCHER_FAR_TARGET_VELOCITY = 1350; //Target velocity for far goal
     final double LAUNCHER_FAR_MIN_VELOCITY = 1325; //minimum required to start a shot for far goal.
 
-    double launcherTarget = LAUNCHER_CLOSE_TARGET_VELOCITY; //These variables allow
+    double launcherTarget = 1130; //These variables allow
     double launcherMin = LAUNCHER_CLOSE_MIN_VELOCITY;
 
     final double LEFT_POSITION = 0.2962; //the left and right position for the diverter servo
@@ -87,6 +87,8 @@ public final class KirbyBlueAutoMeet1A extends LinearOpMode {
 
         if(opModeIsActive()) {
 
+            leftFirecracker.setTargetVelocity(1150);
+            rightFirecracker.setTargetVelocity(1150);
 
             vroom.motorTest(-0.4);
             sleep(2000);
@@ -104,10 +106,14 @@ public final class KirbyBlueAutoMeet1A extends LinearOpMode {
             //third fire cycle
             launchCycle(leftFeeder, leftFirecracker);
 
+            launchCycle(rightFeeder, rightFirecracker);
+
+            launchCycle(leftFeeder, leftFirecracker);
+
             leftFirecracker.ceaseFire();
             rightFirecracker.ceaseFire();
 
-            vroom.powerStrafe(false, 0.5);
+            vroom.powerStrafe(true, 0.5);
             sleep(750);
             vroom.stopMotor();
         }
