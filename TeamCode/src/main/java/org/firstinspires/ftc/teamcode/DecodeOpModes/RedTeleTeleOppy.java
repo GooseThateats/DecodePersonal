@@ -226,11 +226,13 @@ public class RedTeleTeleOppy extends OpMode {
             switch (diverterDirection){
                 case OPEN:
                     diverterDirection = DiverterDirection.OPEN;
-                    diverter.setPosition(OPEN);
+                    leftDiverter.setPosition(OPEN);
+                    rightDiverter.setPosition(OPEN);
                     break;
                 case CLOSED:
                     diverterDirection = DiverterDirection.CLOSED;
-                    diverter.setPosition(CLOSED);
+                    leftDiverter.setPosition(CLOSED);
+                    rightDiverter.setPosition(CLOSED);
                     break;
             }
         }
