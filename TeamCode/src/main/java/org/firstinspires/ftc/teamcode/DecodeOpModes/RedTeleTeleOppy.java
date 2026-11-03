@@ -15,10 +15,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.SubSystems.CameraSystem;
 import org.firstinspires.ftc.teamcode.SubSystems.LED;
 
-/*
- * This file includes a teleop (driver-controlled) file for the goBILDA® Robot in 3 Days for the
- * 2025-2026 FIRST® Tech Challenge season DECODE™!
- */
 
 @TeleOp(group = "TeleOp")
 //@Disabled
